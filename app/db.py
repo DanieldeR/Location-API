@@ -10,9 +10,9 @@ except:
 
 def get_db():
     try:
-        client = MongoClient(conn_str)
+        db = MongoClient(conn_str).get_database()
     except:
         client = MongoClient('localhost', 27017)
-
-    db = client.location
+        db = client.location
+        
     return db.locations
