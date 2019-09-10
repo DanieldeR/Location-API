@@ -10,7 +10,7 @@ except:
 
 def get_db():
     try:
-        db = MongoClient(conn_str).get_database()
+        db = MongoClient(conn_str + '?retryWrites=false').get_database()
     except:
         client = MongoClient('localhost', 27017)
         db = client.location
