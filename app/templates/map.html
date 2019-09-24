@@ -1,38 +1,59 @@
 <!doctype html>
 <head>
 	<title> Where in the world am I?</title>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-	   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-	      crossorigin=""/>
-	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-		   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-		      crossorigin=""></script>
+
+	<!--Load the leaflet.js JS and CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+	
+	<!--Load the bootstrap CSS, we're not using the JS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 </head>
-<nav class="navbar navbar-dark bg-dark">
-	<a class="navbar-brand" href="#">
-		My Location
-	</a>
-</nav>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<div id="mapid" style="width:100%; height:100%; position:fixed; left:0;"></div>
-		</div>
-	</div>
-</div> 
-<script>
-	var mymap = L.map('mapid').setView([{{ location.lat }}, {{ location.lon }}], 15)
+<body>
+	<!--Create a dark bootstrap nav bar -->
+	<nav class="navbar navbar-dark bg-dark">
+		<!--Add a title -->
+		<a class="navbar-brand" href="#">
+			My Location
+		</a>
 
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+		<!--Add a redirect back to my main URL-->
+		<div class="">
+			<span class="navbar-nav mr-auto"></span>
+			<span class="navbar-text"><a href="http://derepentigny.ca">Daniel de R.</a></span>
+		</div>
+	</nav>
+	
+	<!--Create a spot for my map-->
+	<!--TODO: Refactor inline styles-->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div id="mapid" style="width:100%; height:100%; position:fixed; left:0;"></div>
+			</div>
+		</div>
+	</div> 
+	
+	<!-- Create the map-->
+	<!-- TODO: Rafactor into it's own JS file -->
+	<script>
+		//Create the base map and set the default location from the data loaded in
+		var mymap = L.map('mapid').setView([{{ location.lat }}, {{ location.lon }}], 15)
+		
+		//Create the tile layer
+		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 			maxZoom: 18,
-			id: 'mapbox.streets',
+			id: 'mapbox.light',
 			accessToken: 'pk.eyJ1IjoiZGFuaWVsZGVyIiwiYSI6ImNqeGFpOGpnYjAxMWMzbnBkbTludnJwaWwifQ.UWhOJhB_VF2x82cBfMifcw'
-	}).addTo(mymap);
+		}).addTo(mymap);
 
-	var marker = L.circle([{{ location.lat }}, {{ location.lon }}], 1000).addTo(mymap);
+		//Create a radius circle from data loaded in (1KM)
+		var circle = L.circle([{{ location.lat }}, {{ location.lon }}], 1000).addTo(mymap);
 
-	L.marker([{{ location.lat }}, {{ location.lon }}]).addTo(mymap);
-</script>
+		//Create a marker in the center of the circle
+		var marker = L.marker([{{ location.lat }}, {{ location.lon }}]).addTo(mymap);
+	</script>
+</body>
+</html>
